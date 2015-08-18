@@ -39,7 +39,7 @@ public class Movement : MonoBehaviour {
 			
 			try{
 				isTarEnemyClose = (Vector2.Distance (new Vector2(transform.position.x, transform.position.z), new Vector2(currentMoveItem.transform.position.x, currentMoveItem.transform.position.z)) <= currentMoveItem.gameObject.GetComponent<SphereCollider>().radius * currentMoveItem.gameObject.
-				                   transform.localScale.x * 2);
+				                   transform.lossyScale.x * 1.5);
 				Debug.Log ("Got INfo Radius = " + currentMoveItem.gameObject.GetComponent<SphereCollider>().radius.ToString());
 			}
 			catch{

@@ -27,4 +27,6 @@
 *.sqlite
 
 Library
-
+*.sln
+Temp
+*.userprefs

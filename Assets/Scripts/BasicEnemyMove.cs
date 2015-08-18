@@ -43,7 +43,7 @@ public class BasicEnemyMove : MonoBehaviour {
 
 	
 		//When enemy gets this close to the player stop moving and do this
-		if (Vector3.Distance (transform.position, thePlayer.transform.position) <= this.gameObject.GetComponent<SphereCollider>().radius * 2) {
+		if (Vector3.Distance (transform.position, thePlayer.transform.position) <= this.gameObject.GetComponent<SphereCollider>().radius * transform.lossyScale.x * 1.5) {
 			navAgent.Stop ();
 			navAgent.velocity = new Vector3(0,0,0);
 		}
