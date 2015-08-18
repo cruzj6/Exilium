@@ -25,7 +25,6 @@ public class BasicEnemyMove : MonoBehaviour {
 
 
 	}
-
 	void OnCollisionStay(Collision collisionInfo)
 	{
 		if (collisionInfo.gameObject.tag == "player") {
