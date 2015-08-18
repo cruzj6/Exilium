@@ -33,7 +33,7 @@ public class EnemyHealth : MonoBehaviour {
 
 		Slider lifeBar = GetComponent<Slider> ();
 		lifeBar.value -= amountToAdd;
-
+		//TestGitSTuff
 
 		if (lifeBar.value <= 0) {
 			return true;
