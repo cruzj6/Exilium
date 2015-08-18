@@ -5,9 +5,10 @@ public class MeleeCombat : MonoBehaviour {
 
 	public float AttackTimer;
 	float attackSpeed;
-
+	Movement movementScript;
 	// Use this for initialization
 	void Start () {
+		movementScript = GetComponent <Movement>();
 		//Set the attack speed to the initial attackTimer
 		attackSpeed = AttackTimer;
 	}
@@ -26,7 +27,7 @@ public class MeleeCombat : MonoBehaviour {
 				if(AttackTimer <= 0)
 				{
 					//TODO:Cause Attack Animation here
-					Debug.Log ("Attack!");
+					movementScript.playerModel.GetComponent<Animator>().SetTrigger("Attack");
 
 					enemyScript.GotHit = true;
 
@@ -42,15 +43,13 @@ public class MeleeCombat : MonoBehaviour {
 
 	bool IsInMeleeRange()
 	{
-		Movement movementScript = GetComponent <Movement>();
+
 		//Debug.Log (movementScript.IsMeleeRange);
 		return movementScript.IsMeleeRange;
 	}
 
 	GameObject getTargetEnemy()
 	{
-
-		Movement movementScript = GetComponent <Movement>();
 		try{
 		Debug.Log (movementScript.GetCurrentEnemy.tag);
 		}

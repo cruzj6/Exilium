@@ -5,13 +5,14 @@ public class BasicEnemyMove : MonoBehaviour {
 
 	GameObject thePlayer;
 	public float moveSpeed;
-
+	Animator anim;
 
 	NavMeshAgent navAgent;
 
 	// Use this for initialization
 	void Start () {
 
+		anim = gameObject.GetComponent<Animator> ();
 		thePlayer = GameObject.FindWithTag ("player");
 		navAgent = GetComponent<NavMeshAgent> ();
 	}
@@ -43,12 +44,21 @@ public class BasicEnemyMove : MonoBehaviour {
 
 	
 		//When enemy gets this close to the player stop moving and do this
-		if (Vector3.Distance (transform.position, thePlayer.transform.position) <= this.gameObject.GetComponent<SphereCollider>().radius * transform.lossyScale.x * 1.5) {
+		if (Vector3.Distance (transform.position, thePlayer.transform.position) <= this.gameObject.GetComponent<SphereCollider>().radius * transform.lossyScale.x * 2.5) {
 			navAgent.Stop ();
 			navAgent.velocity = new Vector3(0,0,0);
+
+			Vector3 enemyLookAt = thePlayer.transform.position;
+			enemyLookAt.y = this.transform.position.y;
+
+			transform.LookAt(enemyLookAt);
+			anim.SetBool ("IsRunning",false);
+			anim.SetTrigger ("Attack");
 		}
 
 		else {//Move along
+
+			anim.SetBool("IsRunning", true);
 
 			Vector3 playerMovTo = thePlayer.transform.position;
 

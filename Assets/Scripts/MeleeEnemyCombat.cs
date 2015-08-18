@@ -5,11 +5,15 @@ using UnityEngine.UI;
 
 public class MeleeEnemyCombat : MonoBehaviour {
 
+	Animator anim;
 	bool isDead;
 	bool gotHit;
 	public Slider myHealth;
 	// Use this for initialization
 	void Start () {
+
+		anim = gameObject.GetComponent<Animator> ();
+
 		gotHit = false;
 		isDead = false;
 	}
@@ -19,21 +23,23 @@ public class MeleeEnemyCombat : MonoBehaviour {
 
 		//If this enemy was hit do this
 		if (this.gotHit) {
-			
-			//Test Code
-		//	gameObject.GetComponent<Renderer>().material.color = Color.red;
+
+			anim.SetTrigger ("Hit");
+
 			isDead = myHealth.GetComponent<EnemyHealth>().UpdateLifeTotal(50);
 
 		}
-		//else
-//			gameObject.GetComponent<Renderer>().material.color = Color.white;
-		
-		//End Test code
 
 		gotHit = false;//Set this to false after each frame
 
 		if (isDead) {
-			Destroy(transform.parent.gameObject);
+
+			gameObject.GetComponent<NavMeshAgent>().Stop ();
+			gameObject.GetComponent<NavMeshAgent>().velocity = new Vector3(0,0,0);
+
+			anim.SetTrigger("Die");
+
+			Destroy(transform.parent.gameObject, 2.02f);
 		}
 	}
 

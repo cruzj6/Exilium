@@ -6,6 +6,7 @@ public class Movement : MonoBehaviour {
 	public GameObject moveItem;
 	public float moveSpeed;
 	public Camera playerCamera;
+	public GameObject playerModel;
 
 	//Privates
 	NavMeshAgent navAgent;
@@ -13,8 +14,13 @@ public class Movement : MonoBehaviour {
 	GameObject currentMoveItem;
 	bool isMeleeRange;
 	bool isTarEnemyClose;
+	Animator anim;
+
+
 	// Use this for initialization
 	void Start () {
+
+		anim = playerModel.GetComponent<Animator> ();
 		navAgent = GetComponent<NavMeshAgent> ();
 		isMeleeRange = false;
 		isTarEnemyClose = false;
@@ -39,7 +45,7 @@ public class Movement : MonoBehaviour {
 			
 			try{
 				isTarEnemyClose = (Vector2.Distance (new Vector2(transform.position.x, transform.position.z), new Vector2(currentMoveItem.transform.position.x, currentMoveItem.transform.position.z)) <= currentMoveItem.gameObject.GetComponent<SphereCollider>().radius * currentMoveItem.gameObject.
-				                   transform.lossyScale.x * 1.5);
+				                   transform.lossyScale.x * 2.5);
 				Debug.Log ("Got INfo Radius = " + currentMoveItem.gameObject.GetComponent<SphereCollider>().radius.ToString());
 			}
 			catch{
@@ -52,16 +58,25 @@ public class Movement : MonoBehaviour {
 				navAgent.Stop ();
 				navAgent.velocity = new Vector3(0,0,0);
 				//currentMoveItem = null;
+
+				//anim.SetBool ("IsIdle", true);
+
+
 				Destroy (GameObject.FindWithTag("moveItem"));
 
 				Vector3 enemyLookAt = currentMoveItem.gameObject.transform.position;
 				enemyLookAt.y = this.transform.position.y;
-				
+
+				anim.SetBool ("isRunning", false);
+
 				transform.LookAt(enemyLookAt);
 				isMeleeRange = true;
 
 			}
 			else{
+
+				anim.SetBool ("isRunning", true);
+				//anim.SetBool ("IsIdle", false);
 
 				Vector3 enemyLookAt = currentMoveItem.gameObject.transform.position;
 				enemyLookAt.y = this.transform.position.y;

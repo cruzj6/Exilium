@@ -22,7 +22,7 @@ public class EnemyHealth : MonoBehaviour {
 	void UpdatePosition()
 	{
 		Vector3 wantedPos = Camera.main.WorldToScreenPoint (myEnemy.transform.position);
-		wantedPos.y += (myEnemy.GetComponent<SphereCollider>().radius * myEnemy.transform.localScale.x) + (30 * myEnemy.transform.localScale.x);
+		wantedPos.y += myEnemy.gameObject.GetComponent<SphereCollider> ().bounds.size.y + (15 * myEnemy.transform.localScale.y);
 		transform.position = wantedPos;
 
 	}
