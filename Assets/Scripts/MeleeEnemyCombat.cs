@@ -7,33 +7,33 @@ public class MeleeEnemyCombat : MonoBehaviour {
 
 	Animator anim;
 	bool isDead;
-	bool gotHit;
-	public Slider myHealth;
+	public Slider myHealth;//SLider item that contains info on enemy health and UI of healthBar
+	Queue hitsToMe;
+
+
 	// Use this for initialization
 	void Start () {
-
 		anim = gameObject.GetComponent<Animator> ();
-
-		gotHit = false;
+		hitsToMe = new Queue ();
 		isDead = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		//If this enemy was hit do this
-		if (this.gotHit) {
+		//Check for and take hits that were recieved this frame (or are in queue to be recieved)
+		AttackInfoContainer thisFramesAttackInfo = null;
 
-			anim.SetTrigger ("Hit");
-
-			isDead = myHealth.GetComponent<EnemyHealth>().UpdateLifeTotal(50);
-
+		if(hitsToMe.Count > 0){
+			thisFramesAttackInfo = (AttackInfoContainer) hitsToMe.Dequeue ();
 		}
 
-		gotHit = false;//Set this to false after each frame
+		takeAttack (thisFramesAttackInfo);
 
+		//If this enemy is dead do the following
+		//TODO: Make it stop looking at the player in the "BasicEnemyMove" script
+		//when dead
 		if (isDead) {
-
 			gameObject.GetComponent<NavMeshAgent>().Stop ();
 			gameObject.GetComponent<NavMeshAgent>().velocity = new Vector3(0,0,0);
 
@@ -43,10 +43,31 @@ public class MeleeEnemyCombat : MonoBehaviour {
 		}
 	}
 
-	//Were we hit in the last frame?
-	public bool GotHit{
-		set{
-			gotHit = value;
+	/// <summary>
+	/// Function to make enemy take this attack based on theAttack container
+	/// info and if it hit or not
+	/// </summary>
+	/// <param name="theAttack">The attack.</param>
+	public void takeAttack(AttackInfoContainer theAttack)
+	{
+		if (theAttack != null && theAttack.DidHit) {
+			anim.SetTrigger ("Hit");
+			isDead = myHealth.GetComponent<EnemyHealth>().UpdateLifeTotal(theAttack.DamageNum);
+			Debug.Log(theAttack.DamageNum);
 		}
 	}
+
+	//TODO: create an "AttackInfoContainer" to store attack damage, status effect etc. and replace the float
+	//param with it
+	/// <summary>
+	/// queues a hit to the enemy, pass true if hit and AttackInfo in the second param TODO:(float for now)
+	/// </summary>
+	/// <returns><c>true</c>, if hit was caused, <c>false</c> otherwise.</returns>
+	/// <param name="wasHit">If set to <c>true</c> was hit.</param>
+	/// <param name="damageNum">Damage number.</param>
+	public void queueHit(AttackInfoContainer theAttackInfo)
+	{
+		hitsToMe.Enqueue ((object)theAttackInfo);
+	}
+
 }

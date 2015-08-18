@@ -14,9 +14,7 @@ public class EnemyHealth : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
 		UpdatePosition ();
-
 	}
 
 	void UpdatePosition()
@@ -27,13 +25,15 @@ public class EnemyHealth : MonoBehaviour {
 
 	}
 
-
+	/// <summary>
+	/// Updates life bar total (Used to track enemy life also)
+	/// </summary>
+	/// <returns><c>true</c>, if life total was updated, <c>false</c> otherwise.</returns>
+	/// <param name="amountToAdd">Amount to add.</param>
 	public bool UpdateLifeTotal(float amountToAdd)
 	{
-
 		Slider lifeBar = GetComponent<Slider> ();
 		lifeBar.value -= amountToAdd;
-		//TestGitSTuff
 
 		if (lifeBar.value <= 0) {
 			return true;
