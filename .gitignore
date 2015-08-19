@@ -30,3 +30,4 @@ Library
 *.sln
 Temp
 *.userprefs
+*.meta
