@@ -3,10 +3,9 @@ using System.Collections;
 
 public class BasicEnemyMove : MonoBehaviour {
 
-	GameObject thePlayer;
+	public GameObject thePlayer;
 	public float moveSpeed;
 	Animator anim;
-
 	NavMeshAgent navAgent;
 
 	// Use this for initialization
@@ -35,7 +34,7 @@ public class BasicEnemyMove : MonoBehaviour {
 	void Update () {
 		//When enemy gets this close to the player stop moving and do this
 		if (isInMeleeRangeOf (thePlayer)) {
-			BasicAttack ();
+			CeaseMovement ();
 		}
 
 		else {//Move along
@@ -49,6 +48,7 @@ public class BasicEnemyMove : MonoBehaviour {
 	/// </summary>
 	void MoveTowardsPlayer()
 	{
+		anim.speed = 1;
 		anim.SetBool("IsRunning", true);
 		Vector3 playerMovTo = thePlayer.transform.position;
 		playerMovTo.y = transform.position.y;
@@ -74,7 +74,7 @@ public class BasicEnemyMove : MonoBehaviour {
 	/// Animates this enemies' basic attack and ceases movement to do so
 	/// TODO: Needs to do damage
 	/// </summary>
-	void BasicAttack()
+	void CeaseMovement()
 	{
 		navAgent.Stop ();
 		navAgent.velocity = new Vector3(0,0,0);
@@ -84,7 +84,6 @@ public class BasicEnemyMove : MonoBehaviour {
 		
 		transform.LookAt(enemyLookAt);
 		anim.SetBool ("IsRunning",false);
-		anim.SetTrigger ("Attack");
 	}
 
 }

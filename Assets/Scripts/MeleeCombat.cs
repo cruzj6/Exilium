@@ -1,21 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class MeleeCombat : MonoBehaviour {
 
 	public float attackSpeed;
 	float AttackTimer;
 	Movement movementScript;
-
+	Queue hitsToMe;
+	public Slider myHealth;
 	// Use this for initialization
 	void Start () {
 		movementScript = GetComponent <Movement>();
 		//Set initial Attack timer to 0
 		AttackTimer = 0;
+		hitsToMe = new Queue ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		AttackInfoContainer thisFramesAttackInfo = null;
+		
+		if(hitsToMe.Count > 0){
+			thisFramesAttackInfo = (AttackInfoContainer) hitsToMe.Dequeue ();
+			takeAttack (thisFramesAttackInfo);
+		}
 
 		GameObject currentTargetEnemy = getTargetEnemy ();
 		if (IsInMeleeRangeSC () && currentTargetEnemy != null) {
@@ -61,6 +70,20 @@ public class MeleeCombat : MonoBehaviour {
 			return true;
 		else
 			return false;
+	}
+
+	public void queueHit(AttackInfoContainer theContainer)
+	{
+		hitsToMe.Enqueue ((object)theContainer);
+	}
+
+
+	void takeAttack(AttackInfoContainer theContainer)
+	{
+		if (theContainer != null && theContainer.DidHit) {
+			myHealth.GetComponent<PlayerHealth>().UpdateLifeTotal(theContainer.DamageNum);
+			Debug.Log("Player hit for " + theContainer.DamageNum);
+		}
 	}
 
 	/// <summary>
